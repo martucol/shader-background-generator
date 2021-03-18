@@ -3,7 +3,7 @@ const glsl = require("glslify");
 const twgl = require("twgl.js");
 
 const vertexShader = glsl.file("./shader/vertex.glsl"); 
-const fragmentShader = glsl.file("./shader/fragment.glsl"); 
+const fragmentShader = glsl.file("./shader/base-fragment.glsl"); 
 
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext("webgl");
@@ -29,7 +29,8 @@ function render(time) {
     const uniforms = {
         u_time: time * 0.001,
         u_resolution: [gl.canvas.width, gl.canvas.height],
-        u_mouse: mouse
+        u_mouse: mouse,
+        u_aspect: gl.canvas.width/gl.canvas.height,
     };
 
     gl.useProgram(programInfo.program);

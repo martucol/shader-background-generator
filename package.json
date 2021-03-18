@@ -11,8 +11,9 @@
     "@babel/preset-env": "^7.13.10",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
-    "glslify": "^7.1.1",
+    "glsl-hsl2rgb": "^1.1.0",
     "glsl-noise": "0.0.0",
+    "glslify": "^7.1.1",
     "gulp": "^4.0.2",
     "vinyl-source-stream": "^2.0.0"
   },
