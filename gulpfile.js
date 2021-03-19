@@ -12,5 +12,5 @@ gulp.task('build', function() {
     .transform('babelify', {presets: ['@babel/preset-env']})
     .bundle()
     .pipe(source('app.js'))
-    .pipe(gulp.dest(['dist/js']));
+    .pipe(gulp.dest(['docs/js']));
 });
