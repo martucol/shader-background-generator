@@ -63,9 +63,11 @@ void main () {
     // vec3 greenpinkart = greenpinkpsy(pos, u_time);
     // vec3 final = mix(greenpinkart, beautifulsea, alpha);
 
-    vec3 beautifulsea = addnoiselayer(nayra_verdeoscuro, pixelsea(st, u_time));
+    vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, u_time));
+
+    vec3 duotonesea = mix(nayra_verdeoscuro, nayra_naranja, length( pixelsea(st, u_time) ) - 0.6);
 
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
-    gl_FragColor = vec4(beautifulsea, 1.0);
+    gl_FragColor = vec4(duotonesea, 1.0);
 }
