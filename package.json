@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "serve-build": "cd dist && http-server"
+    "serve-build": "cd docs && http-server"
   },
   "repository": {
     "type": "git",
