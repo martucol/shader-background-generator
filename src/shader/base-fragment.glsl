@@ -19,6 +19,7 @@ vec3 colornaranja = vec3(1, 0.424, 0);
 vec3 colorturquesa = vec3(0.118, 0.424, 0.816);
 
 #pragma glslify: noise3d = require('glsl-noise/simplex/3d');
+#pragma glslify: noise2d = require('glsl-noise/simplex/2d');
 #pragma glslify: hsl2rgb = require('glsl-hsl2rgb');
 #pragma glslify: random = require("./random.glsl");
 #pragma glslify: addnoiselayer = require("./add-noise-layer.glsl");
@@ -58,6 +59,9 @@ void main () {
     float dist = length(center - pos);
     float alpha = smoothstep(0.47, 0.55, dist);
 
+    // simple pretty nice without too much white on it
+    vec3 noiselayer = vec3(noise2d(st * 200.0) - 0.5);
+
 
     // CREATIVE SECTION //
 
@@ -69,8 +73,10 @@ void main () {
 
     vec3 duotonesea = mix(nayra_verdeoscuro, nayra_naranja, length( pixelsea(st, u_time) ) - 0.6);
 
-    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time) - 0.2);
+    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time) - ((-normalizedX)  * 0.3 + 0.5) );
+
+    vec3 final = addnoiselayer(duotonecell, noiselayer);
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
-    gl_FragColor = vec4(duotonecell, 1.0);
+    gl_FragColor = vec4(final, 1.0);
 }
