@@ -4,6 +4,7 @@ uniform float u_time;
 uniform float u_width;
 uniform float u_height;
 uniform vec2 u_resolution;
+uniform vec2 u_mouse;
 uniform float u_aspect;
 
 // Colores nayra
@@ -25,6 +26,8 @@ vec3 colorturquesa = vec3(0.118, 0.424, 0.816);
 // tests/art 
 #pragma glslify: pixelsea = require("./art_pixelsea.glsl");
 #pragma glslify: greenpinkpsy = require("./art_greenpinkpsy.glsl");
+#pragma glslify: cell = require("./art_cell.glsl");
+
 
 void main () {
     // UTILITIES SECTION //
@@ -41,9 +44,9 @@ void main () {
     float rnd = random( st , u_time);
 
     // mosaic
-    st *= 10.0;
-    vec2 ipos = floor(st);  // get the integer coords
-    vec2 fpos = fract(st);  // get the fractional coords
+    // st *= 10.0;
+    // vec2 ipos = floor(st);  // get the integer coords
+    // vec2 fpos = fract(st);  // get the fractional coords
 
     // center of the image is (0.0, 0.0)
     vec2 center = vec2(0.0);
@@ -56,7 +59,6 @@ void main () {
     float alpha = smoothstep(0.47, 0.55, dist);
 
 
-
     // CREATIVE SECTION //
 
     // unused
@@ -67,7 +69,8 @@ void main () {
 
     vec3 duotonesea = mix(nayra_verdeoscuro, nayra_naranja, length( pixelsea(st, u_time) ) - 0.6);
 
+    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time) - 0.2);
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
-    gl_FragColor = vec4(duotonesea, 1.0);
+    gl_FragColor = vec4(duotonecell, 1.0);
 }

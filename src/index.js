@@ -11,8 +11,8 @@ const gl = canvas.getContext("webgl");
 const mouse = [0, 0];
 
 document.addEventListener("mousemove", e => {
-    mouse[0] = e.pageX;
-    mouse[1] = e.pageY;
+    mouse[0] = e.clientX;
+    mouse[1] = e.clientY;
 });
 
 const programInfo = twgl.createProgramInfo(gl, [vertexShader, fragmentShader]);
