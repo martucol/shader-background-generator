@@ -8,7 +8,7 @@ float cell (vec2 st, vec2 resolution, float time) {
     float size = 6.0;  // between 1.0 and 50.0
     float m_dist = 1.0;  // minimum distance between 1.0 and 0.1 (0.1 being just points)
     float intensity = 1.0; // regulates the overall intensity of the cell. if distance is too low, intensity should be up
-
+    float slowdown = 4.0; // the higher the value, the slower it goes
 
 
     // cellular noise
@@ -30,7 +30,7 @@ float cell (vec2 st, vec2 resolution, float time) {
             vec2 point = random2(i_st + neighbor);
 
 			// Animate the point
-            point = 0.5 + 0.5*sin(time + 6.2831*point);
+            point = 0.5 + 0.5*sin((time / slowdown) + 6.2831*point);
 
 			// Vector between the pixel and the point
             vec2 diff = neighbor + point - f_st;

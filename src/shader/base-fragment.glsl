@@ -73,7 +73,7 @@ void main () {
 
     vec3 duotonesea = mix(nayra_verdeoscuro, nayra_naranja, length( pixelsea(st, u_time) ) - 0.6);
 
-    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time) - ((-normalizedX)  * 0.3 + 0.5) );
+    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time) - ((-normalizedX)  * 0.4 + 0.6) );
 
     vec3 final = addnoiselayer(duotonecell, noiselayer);
 
