@@ -7,6 +7,15 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_aspect;
 
+// noise-specific uniforms
+uniform float u_noise_amount;
+uniform float u_noise_mix_amount;
+
+// cell-specific uniforms
+uniform float u_cell_size;
+uniform float u_cell_m_dist;
+uniform float u_cell_slowdown;
+
 // Colores nayra
 vec3 nayra_verdeoscuro = vec3(0.023, 0.137, 0.176); // 06232D
 vec3 nayra_verdeclaro = vec3(0.294, 0.713, 0.611); // 4BB69C
@@ -69,13 +78,13 @@ void main () {
     // vec3 greenpinkart = greenpinkpsy(pos, u_time);
     // vec3 final = mix(greenpinkart, beautifulsea, alpha);
 
-    vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, u_time));
+    vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, u_time), u_noise_amount, u_noise_mix_amount);
 
     vec3 duotonesea = mix(nayra_verdeoscuro, nayra_naranja, length( pixelsea(st, u_time) ) - 0.6);
 
-    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time) - ((-normalizedX)  * 0.4 + 0.6) );
+    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time, u_cell_size, u_cell_m_dist, u_cell_slowdown) - ((-normalizedX)  * 0.4 + 0.6) );
 
-    vec3 final = addnoiselayer(duotonecell, noiselayer);
+    vec3 final = addnoiselayer(duotonecell, noiselayer, u_noise_amount, u_noise_mix_amount);
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
     gl_FragColor = vec4(final, 1.0);

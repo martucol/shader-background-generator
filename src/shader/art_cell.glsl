@@ -3,12 +3,12 @@ vec2 random2( vec2 p ) {
     return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
 }
 
-float cell (vec2 st, vec2 resolution, float time) {
+float cell (vec2 st, vec2 resolution, float time, float u_cell_size, float u_cell_m_dist, float u_cell_slowdown) {
     // PARAMETERS //
-    float size = 6.0;  // between 1.0 and 50.0
-    float m_dist = 1.0;  // minimum distance between 1.0 and 0.1 (0.1 being just points)
+    float size = u_cell_size;  // between 1.0 and 50.0
+    float m_dist = u_cell_m_dist;  // minimum distance between 1.0 and 0.1 (0.1 being just points)
     float intensity = 1.0; // regulates the overall intensity of the cell. if distance is too low, intensity should be up
-    float slowdown = 4.0; // the higher the value, the slower it goes
+    float slowdown = u_cell_slowdown; // the higher the value, the slower it goes
 
 
     // cellular noise
