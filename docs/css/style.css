@@ -10,3 +10,20 @@ body {
     width: 100vw;
     height: 100vh;
 }
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+h1 {
+    font-size: 0.85rem;
+    color: white;
+    font-weight: 400;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 0.2rem;
+    margin-left: .5rem;
+}
