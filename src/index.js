@@ -1,6 +1,7 @@
 "use strict" 
 const glsl = require("glslify");
 const twgl = require("twgl.js");
+const {WEBGL} = require("./js/webgl.js");
 
 const vertexShader = glsl.file("./shader/vertex.glsl"); 
 const fragmentShader = glsl.file("./shader/base-fragment.glsl"); 
@@ -40,5 +41,13 @@ function render(time) {
 
     requestAnimationFrame(render);
 }
-requestAnimationFrame(render);
 
+if ( WEBGL.isWebGLAvailable() ) {
+    console.log('WebGL available');
+
+	requestAnimationFrame(render);
+} else {
+
+	const warning = WEBGL.getWebGLErrorMessage();
+	document.getElementById( 'canvas' ).appendChild( warning );
+}
