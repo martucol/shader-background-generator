@@ -4,29 +4,65 @@ const twgl = require("twgl.js");
 const {WEBGL} = require("./js/webgl.js");
 const dat = require('dat.gui');
 
-// Set up params
+// Set up GUI params
 const gui = new dat.GUI();
 
-gui.addFolder('noise mixing params');
+const guiPalletes = gui.addFolder('palettes');
+const colorParams = {
+    a: {
+        primary: [0.023, 0.137, 0.176], //verdeoscuro,
+        secondary: [0.921, 0.396, 0.137] // naranja
+    },
+    b: {
+        primary: [0.023, 0.137, 0.176], //verdeoscuro,
+        secondary: [0.294, 0.713, 0.611] // verdeclaro
+    },
+    c: {
+        primary: [0.901, 0.211, 0.156], //rojo,
+        secondary: [0.960, 0.635, 0.133] // amarillo
+    },
+    d: {
+        primary: [0.007, 0.011, 0.015], // negro,
+        secondary: [0.960, 0.635, 0.133] // amarillo
+    }
+}
+let selectedPalette = 'a';
+const palette = {
+    a: true,
+    b: false,
+    c: false,
+    d: false
+};
+guiPalletes.add(palette, 'a').name('palette 1').listen().onChange(function(){setCheckedPallete("a")});
+guiPalletes.add(palette, 'b').name('palette 2').listen().onChange(function(){setCheckedPallete("b")});
+guiPalletes.add(palette, 'c').name('palette 3').listen().onChange(function(){setCheckedPallete("c")});
+guiPalletes.add(palette, 'd').name('palette 4').listen().onChange(function(){setCheckedPallete("d")});
+
+function setCheckedPallete( prop ){
+  for (let param in palette){
+    palette[param] = false;
+  }
+  palette[prop] = true;
+  selectedPalette = prop;
+}
+
+const guiNoise = gui.addFolder('noise mixing params');
 const noisemixparams = {
     amount: 0.5,
     mix_amount: 0.0105
 }
+guiNoise.add(noisemixparams, 'amount', 0.0, 2.0);
+guiNoise.add(noisemixparams, 'mix_amount', 0.0, 0.02);
 
-gui.add(noisemixparams, 'amount', 0.0, 2.0);
-gui.add(noisemixparams, 'mix_amount', 0.0, 0.02);
-
-gui.addFolder('cell');
+const guiCell = gui.addFolder('cell');
 const cellparams = {
     size: 6.0, // between 1.0 and 50.0
     min_dist: 1.0, // between 0.1 and 1.0
     slowdown: 4.0 // the higher the value, the slower it goes
 };
-
-gui.add(cellparams, 'size', 1.0, 50.0);
-gui.add(cellparams, 'min_dist', 0.1, 1.0);
-gui.add(cellparams, 'slowdown', 0.5, 10.0);
-
+guiCell.add(cellparams, 'size', 1.0, 50.0);
+guiCell.add(cellparams, 'min_dist', 0.1, 1.0);
+guiCell.add(cellparams, 'slowdown', 0.5, 10.0);
 
 
 const vertexShader = glsl.file("./shader/vertex.glsl"); 
@@ -64,7 +100,11 @@ function render(time) {
         // cell params
         u_cell_size: cellparams.size,
         u_cell_m_dist: cellparams.min_dist,
-        u_cell_slowdown: cellparams.slowdown
+        u_cell_slowdown: cellparams.slowdown,
+        // color params
+        u_primary_color: colorParams[selectedPalette].primary,
+        u_secondary_color: colorParams[selectedPalette].secondary
+
     };
 
     gl.useProgram(programInfo.program);

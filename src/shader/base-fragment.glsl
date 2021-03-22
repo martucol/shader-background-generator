@@ -16,6 +16,10 @@ uniform float u_cell_size;
 uniform float u_cell_m_dist;
 uniform float u_cell_slowdown;
 
+// color uniforms
+uniform vec3 u_primary_color;
+uniform vec3 u_secondary_color;
+
 // Colores nayra
 vec3 nayra_verdeoscuro = vec3(0.023, 0.137, 0.176); // 06232D
 vec3 nayra_verdeclaro = vec3(0.294, 0.713, 0.611); // 4BB69C
@@ -80,9 +84,9 @@ void main () {
 
     vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, u_time), u_noise_amount, u_noise_mix_amount);
 
-    vec3 duotonesea = mix(nayra_verdeoscuro, nayra_naranja, length( pixelsea(st, u_time) ) - 0.6);
+    vec3 duotonesea = mix(u_primary_color, u_secondary_color, length( pixelsea(st, u_time) ) - 0.6);
 
-    vec3 duotonecell = mix(nayra_verdeoscuro, nayra_naranja, cell(st, u_resolution, u_time, u_cell_size, u_cell_m_dist, u_cell_slowdown) - ((-normalizedX)  * 0.4 + 0.6) );
+    vec3 duotonecell = mix(u_primary_color, u_secondary_color, cell(st, u_resolution, u_time, u_cell_size, u_cell_m_dist, u_cell_slowdown) - ((-normalizedX)  * 0.4 + 0.6) );
 
     vec3 final = addnoiselayer(duotonecell, noiselayer, u_noise_amount, u_noise_mix_amount);
 
