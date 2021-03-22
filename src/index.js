@@ -14,16 +14,32 @@ const colorParams = {
         secondary: [0.921, 0.396, 0.137] // naranja
     },
     b: {
+        primary: [0.921, 0.396, 0.137], // naranja
+        secondary: [0.023, 0.137, 0.176] //verdeoscuro,
+    },
+    c: {
+        primary: [1.00, 1.0, 1.0], // blanco,
+        secondary: [0.921, 0.396, 0.137] // naranja
+    },
+    d: {
         primary: [0.023, 0.137, 0.176], //verdeoscuro,
         secondary: [0.294, 0.713, 0.611] // verdeclaro
     },
-    c: {
-        primary: [0.901, 0.211, 0.156], //rojo,
-        secondary: [0.960, 0.635, 0.133] // amarillo
+    e: {
+        primary: [0.294, 0.713, 0.611], // verdeclaro
+        secondary: [0.023, 0.137, 0.176] // verdeoscuro
     },
-    d: {
-        primary: [0.007, 0.011, 0.015], // negro,
-        secondary: [0.960, 0.635, 0.133] // amarillo
+    f: {
+        primary: [0.901, 0.211, 0.156], //rojo,
+        secondary: [0.023, 0.137, 0.176] // verdeoscuro
+    },
+    g: {
+        primary: [1.00, 1.0, 1.0], // blanco,
+        secondary: [0.023, 0.137, 0.176] // verdeoscuro
+    },
+    h: {
+        primary: [1.00, 1.0, 1.0], // blanco,
+        secondary: [0.294, 0.713, 0.611] // verdeclaro
     }
 }
 let selectedPalette = 'a';
@@ -31,12 +47,21 @@ const palette = {
     a: true,
     b: false,
     c: false,
-    d: false
+    d: false,
+    e: false,
+    f: false,
+    g: false,
+    h: false,
 };
 guiPalletes.add(palette, 'a').name('palette 1').listen().onChange(function(){setCheckedPallete("a")});
 guiPalletes.add(palette, 'b').name('palette 2').listen().onChange(function(){setCheckedPallete("b")});
 guiPalletes.add(palette, 'c').name('palette 3').listen().onChange(function(){setCheckedPallete("c")});
-guiPalletes.add(palette, 'd').name('palette 4').listen().onChange(function(){setCheckedPallete("d")});
+guiPalletes.add(palette, "d").name('palette 4').listen().onChange(function(){setCheckedPallete("d")});
+guiPalletes.add(palette, "e").name('palette 5').listen().onChange(function(){setCheckedPallete("e")});
+guiPalletes.add(palette, "f").name('palette 6').listen().onChange(function(){setCheckedPallete("f")});
+guiPalletes.add(palette, "g").name('palette 7').listen().onChange(function(){setCheckedPallete("g")});
+guiPalletes.add(palette, "h").name('palette 8').listen().onChange(function(){setCheckedPallete("h")});
+
 
 function setCheckedPallete( prop ){
   for (let param in palette){
