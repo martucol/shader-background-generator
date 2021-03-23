@@ -71,15 +71,26 @@ function setCheckedPallete( prop ){
   selectedPalette = prop;
 }
 
-const guiDuotone = gui.addFolder('duotone');
-const duotoneparams = {
+const guiGeneral = gui.addFolder('general');
+const generalparams = {
+    size: 1.0,
+    colorBalance: 0.5,
+    slowdown: 4.0 // the higher the value, the slower it goes
+};
+guiGeneral.add(generalparams, 'size', 0.5, 60.0);
+guiGeneral.add(generalparams, 'colorBalance', -1.0, 1.5);
+guiGeneral.add(generalparams, 'slowdown', 0.5, 10.0);
+
+
+const guiGradient = gui.addFolder('gradient');
+const gradientparams = {
     amp: 0.4,
     base: 0.6,
     direction: false
 }
-guiDuotone.add(duotoneparams, 'amp', 0.0, 1.0);
-guiDuotone.add(duotoneparams, 'base', 0.0, 1.0);
-guiDuotone.add(duotoneparams, 'direction').name('invert direction');
+guiGradient.add(gradientparams, 'amp', 0.0, 1.0);
+guiGradient.add(gradientparams, 'base', 0.0, 1.0);
+guiGradient.add(gradientparams, 'direction').name('invert direction');
 
 
 const guiNoise = gui.addFolder('noise mixing');
@@ -94,11 +105,9 @@ const guiCell = gui.addFolder('cell');
 const cellparams = {
     size: 6.0, // between 1.0 and 50.0
     min_dist: 1.0, // between 0.1 and 1.0
-    slowdown: 4.0 // the higher the value, the slower it goes
 };
 guiCell.add(cellparams, 'size', 1.0, 50.0);
 guiCell.add(cellparams, 'min_dist', 0.1, 1.0);
-guiCell.add(cellparams, 'slowdown', 0.5, 10.0);
 
 const buttons = { 
     export:function(){ 
@@ -107,7 +116,7 @@ const buttons = {
                 primary: colorParams[selectedPalette].primary,
                 secondary: colorParams[selectedPalette].secondary
             },
-            duotone: duotoneparams,
+            gradient: gradientparams,
             noise: noisemixparams,
             cell: cellparams
         };
@@ -146,20 +155,23 @@ function render(time) {
         u_resolution: [gl.canvas.width, gl.canvas.height],
         u_mouse: mouse,
         u_aspect: gl.canvas.width/gl.canvas.height,
+        // general params
+        u_slowdown: generalparams.slowdown,
+        u_size: generalparams.size,
+        u_color_balance: generalparams.colorBalance,
         // noise mixing params
         u_noise_amount: noisemixparams.amount,
         u_noise_mix_amount: noisemixparams.mix_amount,
         // cell params
         u_cell_size: cellparams.size,
         u_cell_m_dist: cellparams.min_dist,
-        u_cell_slowdown: cellparams.slowdown,
         // color params
         u_primary_color: colorParams[selectedPalette].primary,
         u_secondary_color: colorParams[selectedPalette].secondary,
-        // duotone params
-        u_duotone_amp: duotoneparams.amp,
-        u_duotone_base: duotoneparams.base,
-        u_duotone_direction: duotoneparams.direction ? 1.0 : -1.0
+        // gradient params
+        u_gradient_amp: gradientparams.amp,
+        u_gradient_base: gradientparams.base,
+        u_gradient_direction: gradientparams.direction ? 1.0 : -1.0
     };
 
     gl.useProgram(programInfo.program);
