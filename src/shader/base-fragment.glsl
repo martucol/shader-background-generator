@@ -108,20 +108,22 @@ void main () {
 
 
     float cell_art = cell(st, u_resolution, controlledtime, u_size, u_cell_m_dist);
-
     // we need to fix this duotone gradient blending
-    vec3 duotonecell = mix(
+    vec3 bicolorcell = mix(
         u_primary_color,
         u_secondary_color, 
         clamp( // only use values betwenn 0.0 and 1.0 to avoid moving away from palette colors
-            cell_art - ( u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 
+            //cell_art - ( u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 
+            cell_art - u_color_balance/2.0,
             0.0, 
             1.0
         ) 
     );
 
-    vec3 final = addnoiselayer(bicolorsea, noiselayer, u_noise_amount, u_noise_mix_amount);
+    vec3 gradiented = mix(bicolororganic, u_primary_color, clamp((u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 0.0, 1.0));
+
+    vec3 final = addnoiselayer(gradiented, noiselayer, u_noise_amount, u_noise_mix_amount);
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
-    gl_FragColor = vec4(bicolororganic, 1.0);
+    gl_FragColor = vec4(final, 1.0);
 }
