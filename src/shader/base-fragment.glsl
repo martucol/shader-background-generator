@@ -42,6 +42,10 @@ vec3 colorturquesa = vec3(0.118, 0.424, 0.816);
 #pragma glslify: random = require("./random.glsl");
 #pragma glslify: addnoiselayer = require("./add-noise-layer.glsl");
 
+// blednding
+#pragma glslify: blend_lighten = require("./blend_lighten.glsl");
+#pragma glslify: blend_darken = require("./blend_darken.glsl");
+
 // tests/art 
 #pragma glslify: pixelsea = require("./art_pixelsea.glsl");
 #pragma glslify: greenpinkpsy = require("./art_greenpinkpsy.glsl");
