@@ -12,6 +12,11 @@ uniform float u_slowdown;
 uniform float u_color_balance;
 uniform float u_size;
 
+// pattern selector
+uniform bool u_pattern_a;
+uniform bool u_pattern_b;
+uniform bool u_pattern_c;
+
 // noise-specific uniforms
 uniform float u_noise_amount;
 uniform float u_noise_mix_amount;
@@ -98,29 +103,41 @@ void main () {
     // vec3 final = mix(greenpinkart, beautifulsea, alpha);
 
 
-    vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, controlledtime), u_noise_amount, u_noise_mix_amount);
-    vec3 bicolorsea = mix(u_primary_color, u_secondary_color, clamp(length( pixelsea(st, controlledtime) ) - u_color_balance, 0.0, 1.0));
 
 
-    // this u_duotone_base should be a general -> u_color_balance
-    vec3 organic = vec3(organic_noise(st, controlledtime, u_size));
-    vec3 bicolororganic = mix(u_primary_color, u_secondary_color, clamp(length(organic) - u_color_balance, 0.0, 1.0));
+    vec3 selected_pattern;
 
+    if (u_pattern_a) {
+        float cell_art = cell(st, u_resolution, controlledtime, u_size, u_cell_m_dist);
+        // we need to fix this duotone gradient blending
+        vec3 bicolorcell = mix(
+            u_primary_color,
+            u_secondary_color, 
+            clamp( // only use values betwenn 0.0 and 1.0 to avoid moving away from palette colors
+                //cell_art - ( u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 
+                cell_art - u_color_balance/2.0,
+                0.0, 
+                1.0
+            ) 
+        );
+        selected_pattern = bicolorcell;
+    }
 
-    float cell_art = cell(st, u_resolution, controlledtime, u_size, u_cell_m_dist);
-    // we need to fix this duotone gradient blending
-    vec3 bicolorcell = mix(
-        u_primary_color,
-        u_secondary_color, 
-        clamp( // only use values betwenn 0.0 and 1.0 to avoid moving away from palette colors
-            //cell_art - ( u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 
-            cell_art - u_color_balance/2.0,
-            0.0, 
-            1.0
-        ) 
-    );
+    if (u_pattern_b) {
+        // this u_duotone_base should be a general -> u_color_balance
+        vec3 organic = vec3(organic_noise(st, controlledtime, u_size));
+        vec3 bicolororganic = mix(u_primary_color, u_secondary_color, clamp(length(organic) - u_color_balance, 0.0, 1.0));
 
-    vec3 gradiented = mix(bicolororganic, u_primary_color, clamp((u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 0.0, 1.0));
+        selected_pattern = bicolororganic;
+    }
+
+    if (u_pattern_c) {
+        vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, controlledtime,  u_size), u_noise_amount, u_noise_mix_amount);
+        vec3 bicolorsea = mix(u_primary_color, u_secondary_color, clamp(length( pixelsea(st, controlledtime, u_size)) - u_color_balance, 0.0, 1.0));
+        selected_pattern = bicolorsea;
+    }
+
+    vec3 gradiented = mix(selected_pattern, u_primary_color, clamp((u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 0.0, 1.0));
 
     vec3 final = addnoiselayer(gradiented, noiselayer, u_noise_amount, u_noise_mix_amount);
 

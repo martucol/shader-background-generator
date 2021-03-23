@@ -7,7 +7,25 @@ const dat = require('dat.gui');
 // Set up GUI params
 const gui = new dat.GUI();
 
-const guiPalletes = gui.addFolder('palettes');
+const guiPatterns = gui.addFolder('patterns');
+const patterns = {
+    a: true,
+    b: false,
+    c: false
+}
+guiPatterns.add(patterns, 'a').name('pattern 1').listen().onChange(function(){setCheckedPattern("a")});
+guiPatterns.add(patterns, 'b').name('pattern 2').listen().onChange(function(){setCheckedPattern("b")});
+guiPatterns.add(patterns, 'c').name('pattern 3').listen().onChange(function(){setCheckedPattern("c")});
+
+function setCheckedPattern( prop ){
+    for (let param in patterns){
+        patterns[param] = false;
+    }
+    patterns[prop] = true;
+}
+  
+
+const guiPalletes = gui.addFolder('colors');
 const colorParams = {
     a: {
         primary: [0.023, 0.137, 0.176], //verdeoscuro,
@@ -169,7 +187,11 @@ function render(time) {
         // gradient params
         u_gradient_amp: gradientparams.amp,
         u_gradient_base: gradientparams.base,
-        u_gradient_direction: gradientparams.direction ? 1.0 : -1.0
+        u_gradient_direction: gradientparams.direction ? 1.0 : -1.0,
+        // pattern params
+        u_pattern_a: patterns.a,
+        u_pattern_b: patterns.b,
+        u_pattern_c: patterns.c,
     };
 
     gl.useProgram(programInfo.program);
