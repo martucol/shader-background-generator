@@ -71,7 +71,18 @@ function setCheckedPallete( prop ){
   selectedPalette = prop;
 }
 
-const guiNoise = gui.addFolder('noise mixing params');
+const guiDuotone = gui.addFolder('duotone');
+const duotoneparams = {
+    amp: 0.4,
+    base: 0.6,
+    direction: false
+}
+guiDuotone.add(duotoneparams, 'amp', 0.0, 1.0);
+guiDuotone.add(duotoneparams, 'base', 0.0, 1.0);
+guiDuotone.add(duotoneparams, 'direction').name('invert direction');
+
+
+const guiNoise = gui.addFolder('noise mixing');
 const noisemixparams = {
     amount: 0.5,
     mix_amount: 0.0105
@@ -128,8 +139,11 @@ function render(time) {
         u_cell_slowdown: cellparams.slowdown,
         // color params
         u_primary_color: colorParams[selectedPalette].primary,
-        u_secondary_color: colorParams[selectedPalette].secondary
-
+        u_secondary_color: colorParams[selectedPalette].secondary,
+        // duotone params
+        u_duotone_amp: duotoneparams.amp,
+        u_duotone_base: duotoneparams.base,
+        u_duotone_direction: duotoneparams.direction ? 1.0 : -1.0
     };
 
     gl.useProgram(programInfo.program);
