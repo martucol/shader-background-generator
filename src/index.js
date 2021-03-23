@@ -100,6 +100,22 @@ guiCell.add(cellparams, 'size', 1.0, 50.0);
 guiCell.add(cellparams, 'min_dist', 0.1, 1.0);
 guiCell.add(cellparams, 'slowdown', 0.5, 10.0);
 
+const buttons = { 
+    export:function(){ 
+        const params = {
+            palette: {
+                primary: colorParams[selectedPalette].primary,
+                secondary: colorParams[selectedPalette].secondary
+            },
+            duotone: duotoneparams,
+            noise: noisemixparams,
+            cell: cellparams
+        };
+        console.log('params', params);
+    }
+};
+gui.add(buttons,'export').name('log params');
+
 
 const vertexShader = glsl.file("./shader/vertex.glsl"); 
 const fragmentShader = glsl.file("./shader/base-fragment.glsl"); 
@@ -159,7 +175,6 @@ if ( WEBGL.isWebGLAvailable() ) {
 
 	requestAnimationFrame(render);
 } else {
-
 	const warning = WEBGL.getWebGLErrorMessage();
 	document.getElementById( 'canvas' ).appendChild( warning );
 }
