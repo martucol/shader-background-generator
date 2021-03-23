@@ -73,8 +73,8 @@ function setCheckedPallete( prop ){
 
 const guiGeneral = gui.addFolder('general');
 const generalparams = {
-    size: 1.0,
-    colorBalance: 0.5,
+    size: 5.0,
+    colorBalance: 0.0,
     slowdown: 4.0 // the higher the value, the slower it goes
 };
 guiGeneral.add(generalparams, 'size', 0.5, 60.0);
@@ -88,8 +88,8 @@ const gradientparams = {
     base: 0.6,
     direction: false
 }
-guiGradient.add(gradientparams, 'amp', 0.0, 1.0);
-guiGradient.add(gradientparams, 'base', 0.0, 1.0);
+guiGradient.add(gradientparams, 'amp', 0.0, 1.0).name('wide');
+guiGradient.add(gradientparams, 'base', 0.0, 1.0).name('amount');
 guiGradient.add(gradientparams, 'direction').name('invert direction');
 
 
@@ -99,14 +99,12 @@ const noisemixparams = {
     mix_amount: 0.0105
 }
 guiNoise.add(noisemixparams, 'amount', 0.0, 2.0);
-guiNoise.add(noisemixparams, 'mix_amount', 0.0, 0.5);
+guiNoise.add(noisemixparams, 'mix_amount', 0.0, 0.1);
 
 const guiCell = gui.addFolder('cell');
 const cellparams = {
-    size: 6.0, // between 1.0 and 50.0
     min_dist: 1.0, // between 0.1 and 1.0
 };
-guiCell.add(cellparams, 'size', 1.0, 50.0);
 guiCell.add(cellparams, 'min_dist', 0.1, 1.0);
 
 const buttons = { 
