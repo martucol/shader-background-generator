@@ -88,7 +88,7 @@ const noisemixparams = {
     mix_amount: 0.0105
 }
 guiNoise.add(noisemixparams, 'amount', 0.0, 2.0);
-guiNoise.add(noisemixparams, 'mix_amount', 0.0, 0.5);
+guiNoise.add(noisemixparams, 'mix_amount', 0.0, 0.3);
 
 const guiCell = gui.addFolder('cell');
 const cellparams = {

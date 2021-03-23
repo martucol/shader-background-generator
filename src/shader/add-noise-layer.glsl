@@ -14,7 +14,7 @@ vec3 addnoiselayer (vec3 layer, vec3 noise, float u_noise_amount, float u_noise_
     vec3 lightened = blend_darken(noise, layer);
     vec3 noisescreenlightened = mix(layer, noise, length(normalize(lightened))+ noiseamount);
 
-    vec3 final = mix(layer, noisescreenlightened, mixamount);
+    vec3 final = mix(layer, noisescreen, mixamount);
     return final;
 }
 
