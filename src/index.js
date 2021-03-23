@@ -4,6 +4,16 @@ const twgl = require("twgl.js");
 const {WEBGL} = require("./js/webgl.js");
 const dat = require('dat.gui');
 
+const vertexShader = glsl.file("./shader/vertex.glsl"); 
+const fragmentShader = glsl.file("./shader/base-fragment.glsl"); 
+
+const canvas = document.getElementById("canvas");
+const gl = canvas.getContext("webgl");
+
+const mouse = [0, 0];
+
+
+
 // Set up GUI params
 const gui = new dat.GUI();
 
@@ -126,7 +136,7 @@ const cellparams = {
 guiCell.add(cellparams, 'min_dist', 0.1, 1.0);
 
 const buttons = { 
-    export:function(){ 
+    log:function(){ 
         const params = {
             palette: {
                 primary: colorParams[selectedPalette].primary,
@@ -137,18 +147,17 @@ const buttons = {
             cell: cellparams
         };
         console.log('params', params);
+    },
+    drawScene: false,
+    export: function(){
+        buttons.drawScene = true;
     }
+
 };
-gui.add(buttons,'export').name('log params');
+gui.add(buttons,'log').name('log params');
+gui.add(buttons,'export').name('export png');
 
 
-const vertexShader = glsl.file("./shader/vertex.glsl"); 
-const fragmentShader = glsl.file("./shader/base-fragment.glsl"); 
-
-const canvas = document.getElementById("canvas");
-const gl = canvas.getContext("webgl");
-
-const mouse = [0, 0];
 
 document.addEventListener("mousemove", e => {
     mouse[0] = e.clientX;
@@ -199,6 +208,10 @@ function render(time) {
     twgl.setUniforms(programInfo, uniforms);
     twgl.drawBufferInfo(gl, bufferInfo);
 
+    if (buttons.drawScene) {
+        window.open(canvas.toDataURL("image/png"), '_blank');
+        buttons.drawScene = false;
+    }
     requestAnimationFrame(render);
 }
 
