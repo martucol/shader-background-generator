@@ -7,23 +7,26 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_aspect;
 
+// general 
+uniform float u_slowdown;
+uniform float u_color_balance;
+uniform float u_size;
+
 // noise-specific uniforms
 uniform float u_noise_amount;
 uniform float u_noise_mix_amount;
 
 // cell-specific uniforms
-uniform float u_cell_size;
 uniform float u_cell_m_dist;
-uniform float u_cell_slowdown;
 
 // color uniforms
 uniform vec3 u_primary_color;
 uniform vec3 u_secondary_color;
 
-// duotone uniforms
-uniform float u_duotone_amp;
-uniform float u_duotone_base;
-uniform float u_duotone_direction;
+// gradient uniforms
+uniform float u_gradient_amp;
+uniform float u_gradient_base;
+uniform float u_gradient_direction;
 
 // Colores nayra
 vec3 nayra_verdeoscuro = vec3(0.023, 0.137, 0.176); // 06232D
@@ -48,6 +51,7 @@ vec3 colorturquesa = vec3(0.118, 0.424, 0.816);
 
 // tests/art 
 #pragma glslify: pixelsea = require("./art_pixelsea.glsl");
+#pragma glslify: organic_noise = require("./art_organicnoise.glsl");
 #pragma glslify: greenpinkpsy = require("./art_greenpinkpsy.glsl");
 #pragma glslify: cell = require("./art_cell.glsl");
 
@@ -84,6 +88,8 @@ void main () {
     // simple pretty nice without too much white on it
     vec3 noiselayer = vec3(noise2d(st * 200.0) - 0.5);
 
+    float controlledtime = u_time / u_slowdown;
+
 
     // CREATIVE SECTION //
 
@@ -91,22 +97,31 @@ void main () {
     // vec3 greenpinkart = greenpinkpsy(pos, u_time);
     // vec3 final = mix(greenpinkart, beautifulsea, alpha);
 
-    vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, u_time), u_noise_amount, u_noise_mix_amount);
-    vec3 duotonesea = mix(u_primary_color, u_secondary_color, length( pixelsea(st, u_time) ) - 0.6);
 
-    float cell_art = cell(st, u_resolution, u_time, u_cell_size, u_cell_m_dist, u_cell_slowdown);
+    vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, controlledtime), u_noise_amount, u_noise_mix_amount);
+    vec3 bicolorsea = mix(u_primary_color, u_secondary_color, clamp(length( pixelsea(st, controlledtime) ) - u_color_balance, 0.0, 1.0));
+
+
+    // this u_duotone_base should be a general -> u_color_balance
+    vec3 organic = vec3(organic_noise(st, controlledtime, u_size));
+    vec3 bicolororganic = mix(u_primary_color, u_secondary_color, clamp(length(organic) - u_color_balance, 0.0, 1.0));
+
+
+    float cell_art = cell(st, u_resolution, controlledtime, u_size, u_cell_m_dist);
+
+    // we need to fix this duotone gradient blending
     vec3 duotonecell = mix(
         u_primary_color,
         u_secondary_color, 
         clamp( // only use values betwenn 0.0 and 1.0 to avoid moving away from palette colors
-            cell_art - ( u_duotone_direction * (normalizedX)  * u_duotone_amp + u_duotone_base), 
+            cell_art - ( u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 
             0.0, 
             1.0
         ) 
     );
 
-    vec3 final = addnoiselayer(duotonecell, noiselayer, u_noise_amount, u_noise_mix_amount);
+    vec3 final = addnoiselayer(bicolorsea, noiselayer, u_noise_amount, u_noise_mix_amount);
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
-    gl_FragColor = vec4(final, 1.0);
+    gl_FragColor = vec4(bicolororganic, 1.0);
 }
