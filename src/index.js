@@ -60,14 +60,18 @@ const colorParams = {
         secondary: [0.023, 0.137, 0.176] // verdeoscuro
     },
     f: {
-        primary: [0.901, 0.211, 0.156], //rojo,
-        secondary: [0.023, 0.137, 0.176] // verdeoscuro
+        primary: [0.023, 0.137, 0.176] , //verdeoscuro
+        secondary: [0.901, 0.211, 0.156] // rojo
     },
     g: {
-        primary: [1.00, 1.0, 1.0], // blanco,
+        primary: [0.901, 0.211, 0.156], // rojo
         secondary: [0.023, 0.137, 0.176] // verdeoscuro
     },
     h: {
+        primary: [1.00, 1.0, 1.0], // blanco,
+        secondary: [0.023, 0.137, 0.176] // verdeoscuro
+    },
+    i: {
         primary: [1.00, 1.0, 1.0], // blanco,
         secondary: [0.294, 0.713, 0.611] // verdeclaro
     }
@@ -82,6 +86,7 @@ const palette = {
     f: false,
     g: false,
     h: false,
+    i: false,
 };
 guiPalletes.add(palette, 'a').name('palette 1').listen().onChange(function(){setCheckedPallete("a")});
 guiPalletes.add(palette, 'b').name('palette 2').listen().onChange(function(){setCheckedPallete("b")});
@@ -91,6 +96,7 @@ guiPalletes.add(palette, "e").name('palette 5').listen().onChange(function(){set
 guiPalletes.add(palette, "f").name('palette 6').listen().onChange(function(){setCheckedPallete("f")});
 guiPalletes.add(palette, "g").name('palette 7').listen().onChange(function(){setCheckedPallete("g")});
 guiPalletes.add(palette, "h").name('palette 8').listen().onChange(function(){setCheckedPallete("h")});
+guiPalletes.add(palette, "i").name('palette 9').listen().onChange(function(){setCheckedPallete("i")});
 
 
 function setCheckedPallete( prop ){
@@ -126,8 +132,8 @@ guiGradient.add(gradientparams, 'direction').name('invert direction');
 const guiNoise = gui.addFolder('noise mixing');
 const noisemixparams = {
     mix_amount: 0.25,
-    grain: 20.0,
-    amount: 0.5,
+    grain: 420.0,
+    amount: 0.4,
 }
 guiNoise.add(noisemixparams, 'mix_amount', 0.0, 1.1).name('opacity');
 guiNoise.add(noisemixparams, 'amount', 0.0, 1.0).name('amount'); // max -0.5, min 1.0
