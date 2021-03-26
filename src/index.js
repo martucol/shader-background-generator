@@ -12,7 +12,9 @@ const gl = canvas.getContext("webgl");
 
 const mouse = [0, 0];
 
-
+const map = (num, in_min, in_max, out_min, out_max) => {
+    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }  
 
 // Set up GUI params
 const gui = new dat.GUI();
@@ -123,11 +125,14 @@ guiGradient.add(gradientparams, 'direction').name('invert direction');
 
 const guiNoise = gui.addFolder('noise mixing');
 const noisemixparams = {
+    mix_amount: 0.25,
+    grain: 20.0,
     amount: 0.5,
-    mix_amount: 0.0105
 }
-guiNoise.add(noisemixparams, 'amount', 0.0, 2.0);
-guiNoise.add(noisemixparams, 'mix_amount', 0.0, 0.1);
+guiNoise.add(noisemixparams, 'mix_amount', 0.0, 1.1).name('opacity');
+guiNoise.add(noisemixparams, 'amount', 0.0, 1.0).name('amount'); // max -0.5, min 1.0
+guiNoise.add(noisemixparams, 'grain', 5.1, 800.1).name('grain size');
+
 
 const guiCell = gui.addFolder('cell');
 const cellparams = {
@@ -185,8 +190,10 @@ function render(time) {
         u_size: generalparams.size,
         u_color_balance: generalparams.colorBalance,
         // noise mixing params
-        u_noise_amount: noisemixparams.amount,
+        u_noise_amp: 0.5,
         u_noise_mix_amount: noisemixparams.mix_amount,
+        u_noise_grain: noisemixparams.grain,
+        u_noise_amount: map((1.0-noisemixparams.amount), 0.0, 1.0, -0.5, 1.0),
         // cell params
         u_cell_size: cellparams.size,
         u_cell_m_dist: cellparams.min_dist,

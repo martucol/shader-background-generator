@@ -18,8 +18,11 @@ uniform bool u_pattern_b;
 uniform bool u_pattern_c;
 
 // noise-specific uniforms
-uniform float u_noise_amount;
+uniform float u_noise_amp;
 uniform float u_noise_mix_amount;
+uniform float u_noise_grain;
+uniform float u_noise_amount;
+
 
 // cell-specific uniforms
 uniform float u_cell_m_dist;
@@ -91,7 +94,7 @@ void main () {
     float alpha = smoothstep(0.47, 0.55, dist);
 
     // simple pretty nice without too much white on it
-    vec3 noiselayer = vec3(noise2d(st * 200.0) - 0.5);
+    vec3 noiselayer = vec3(noise2d(st * u_noise_grain) - u_noise_amount);
 
     float controlledtime = u_time / u_slowdown;
 
@@ -132,14 +135,14 @@ void main () {
     }
 
     if (u_pattern_c) {
-        vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, controlledtime,  u_size), u_noise_amount, u_noise_mix_amount);
+        vec3 beautifulsea = addnoiselayer(nayra_verdeclaro, pixelsea(st, controlledtime,  u_size), u_noise_amp, u_noise_mix_amount);
         vec3 bicolorsea = mix(u_primary_color, u_secondary_color, clamp(length( pixelsea(st, controlledtime, u_size)) - u_color_balance, 0.0, 1.0));
         selected_pattern = bicolorsea;
     }
 
     vec3 gradiented = mix(selected_pattern, u_primary_color, clamp((u_gradient_direction * (normalizedX)  * u_gradient_amp + u_gradient_base), 0.0, 1.0));
 
-    vec3 final = addnoiselayer(gradiented, noiselayer, u_noise_amount, u_noise_mix_amount);
+    vec3 final = addnoiselayer(gradiented, noiselayer, u_noise_amp, u_noise_mix_amount);
 
     // do not touch alpha in here. if wanting to modify "alpha" of layers, use mix function before this. 
     gl_FragColor = vec4(final, 1.0);

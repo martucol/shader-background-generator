@@ -1,20 +1,16 @@
 #pragma glslify: blend_darken = require("./blend_darken.glsl");
+#pragma glslify: blend_lighten = require("./blend_lighten.glsl");
 
 
-vec3 addnoiselayer (vec3 layer, vec3 noise, float u_noise_amount, float u_noise_mix_amount) {
+vec3 addnoiselayer (vec3 layer, vec3 noise, float u_noise_amp, float u_noise_mix_amount) {
     // PARAMETERS //
-    float noiseamount = u_noise_amount; // between 0.0 and 0.80
-    float mixamount = u_noise_mix_amount; // 0.01 for super subtle effect
+    float noiseamount = u_noise_amp; // not used for now
+    float mixamount = u_noise_mix_amount; // defines noise "transparency"
 
-    vec3 noisescreen = mix(layer, noise, length(normalize(noise))+ noiseamount);
+    vec3 lightened = blend_lighten(noise, layer);
+    vec3 noisescreenlightened = mix(layer, lightened, 1.0);
 
-    vec3 darkened = blend_darken(noise, layer);
-    vec3 noisescreendarkened = mix(layer, noise, length(normalize(darkened))+ noiseamount);
-
-    vec3 lightened = blend_darken(noise, layer);
-    vec3 noisescreenlightened = mix(layer, noise, length(normalize(lightened))+ noiseamount);
-
-    vec3 final = mix(layer, noisescreen, mixamount);
+    vec3 final = mix(layer, noisescreenlightened, u_noise_mix_amount);
     return final;
 }
 
